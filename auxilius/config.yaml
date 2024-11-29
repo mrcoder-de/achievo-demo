@@ -74,3 +74,4 @@ checkpoints:
         actionClassName: "CreateNewCustomerWithRequiredInformation"
         customerMustHaveAName,ContactEmail,PhoneNumberAndBillingAddress:
           glue: true
+          service: true
