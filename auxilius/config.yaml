@@ -85,3 +85,6 @@ checkpoints:
           service: true
           done: true
         done: true
+      aControllerModifiesACustomer:
+        action: true
+        actionClassName: "ModifyExistingCustomerDetails"
