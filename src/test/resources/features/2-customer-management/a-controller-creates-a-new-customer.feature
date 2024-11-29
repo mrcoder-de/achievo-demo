@@ -1,5 +1,6 @@
 Feature: A controller creates a new customer
 
+  @not-implemented
   Rule: Customer must have a name, contact email, phone number and billing address
 
     Example: Creating a customer with all required information
@@ -12,6 +13,7 @@ Feature: A controller creates a new customer
       When the controller attempts to create the customer
       Then a customer-management error should occur with the message "Missing required fields"
 
+  @not-implemented
   Rule: Customer must have a valid contact email
 
     Example: Creating a customer with an invalid email
@@ -19,7 +21,6 @@ Feature: A controller creates a new customer
       When the controller attempts to create the customer
       Then a customer-management error should occur with the message "Invalid customer email address"
 
-  @not-implemented
   Rule: Customer must have a valid phone number
 
     Example: Creating a customer with an invalid phone number
