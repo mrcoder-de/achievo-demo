@@ -111,3 +111,4 @@ checkpoints:
         theControllerReceivesAnEmptyListIfThereAreNoCustomers:
           glue: true
           service: true
+          done: true
