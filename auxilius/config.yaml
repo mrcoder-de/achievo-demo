@@ -27,3 +27,6 @@ checkpoints:
           service: true
           done: true
         done: true
+      anAdminFetchesAListOfAllUsers:
+        action: true
+        actionClassName: "FetchAllUsersWithActiveFilter"
