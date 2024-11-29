@@ -24,6 +24,7 @@ public class UserManagementSteps {
 
     private User user;
     private Exception thrownException;
+    private User existingUser;
 
     @Given("a user with an invalid email")
     public void aUserWithAnInvalidEmail() {
@@ -57,8 +58,30 @@ public class UserManagementSteps {
         user.setLastName("");
     }
 
+    @Given("an existing user")
+    public void anExistingUser() {
+        existingUser = new User();
+        existingUser.setEmail("existing@example.com");
+        existingUser.setFirstName("Existing");
+        existingUser.setLastName("User");
+        userRepository.save(existingUser);
+    }
+
     @When("the admin attempts to create the user")
     public void theAdminAttemptsToCreateTheUser() {
+        try {
+            user = createNewUserByAdmin.execute(user);
+        } catch (Exception e) {
+            thrownException = e;
+        }
+    }
+
+    @When("the admin attempts to create a new user with the same email as the existing user")
+    public void theAdminAttemptsToCreateANewUserWithTheSameEmailAsTheExistingUser() {
+        user = new User();
+        user.setEmail(existingUser.getEmail());
+        user.setFirstName("New");
+        user.setLastName("User");
         try {
             user = createNewUserByAdmin.execute(user);
         } catch (Exception e) {
