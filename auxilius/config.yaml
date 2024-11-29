@@ -76,3 +76,5 @@ checkpoints:
           glue: true
           service: true
           done: true
+        customerMustHaveAValidContactEmail:
+          glue: true
