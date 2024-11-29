@@ -91,3 +91,4 @@ checkpoints:
         theControllerCanModifyAllFieldsOfACustomer:
           glue: true
           service: true
+          done: true
