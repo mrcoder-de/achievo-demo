@@ -97,3 +97,6 @@ checkpoints:
           service: true
           done: true
         done: true
+      aControllerViewsAListOfAllCustomers:
+        action: true
+        actionClassName: "FetchFilterableListOfAllCustomers"
