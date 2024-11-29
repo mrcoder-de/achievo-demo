@@ -43,3 +43,6 @@ checkpoints:
           service: true
           done: true
         done: true
+      anAdminFetchesASingleUserByEmail:
+        action: true
+        actionClassName: "FindUserByEmail"
