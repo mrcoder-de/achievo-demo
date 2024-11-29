@@ -86,6 +86,19 @@ public class UserManagementSteps {
         }
     }
 
+    @Given("both active and inactive users exist")
+    public void bothActiveAndInactiveUsersExist() {
+        createdUsers = new ArrayList<>();
+        for (int i = 0; i < 5; i++) {
+            User newUser = new User();
+            newUser.setEmail("user" + i + "@example.com");
+            newUser.setFirstName("FirstName" + i);
+            newUser.setLastName("LastName" + i);
+            newUser.setIsActive(i % 2 == 0); // Even indexed users are active, odd are inactive
+            createdUsers.add(userRepository.save(newUser));
+        }
+    }
+
     @When("the admin attempts to create the user")
     public void theAdminAttemptsToCreateTheUser() {
         try {
@@ -113,6 +126,16 @@ public class UserManagementSteps {
         fetchedUsers = fetchAllUsersWithActiveFilter.execute(null);
     }
 
+    @When("the admin requests a list of active users")
+    public void theAdminRequestsAListOfActiveUsers() {
+        fetchedUsers = fetchAllUsersWithActiveFilter.execute(true);
+    }
+
+    @When("the admin requests a list of inactive users")
+    public void theAdminRequestsAListOfInactiveUsers() {
+        fetchedUsers = fetchAllUsersWithActiveFilter.execute(false);
+    }
+
     @Then("a user-management error should occur with the message {string}")
     public void aUserManagementErrorShouldOccurWithTheMessage(String errorMessage) {
         assertNotNull(thrownException);
@@ -137,5 +160,25 @@ public class UserManagementSteps {
         for (User createdUser : createdUsers) {
             assertTrue(fetchedUsers.stream().anyMatch(u -> u.getEmail().equals(createdUser.getEmail())));
         }
+    }
+
+    @Then("only active users should be returned")
+    public void onlyActiveUsersShouldBeReturned() {
+        assertNotNull(fetchedUsers);
+        for (User fetchedUser : fetchedUsers) {
+            assertTrue(fetchedUser.getIsActive());
+        }
+        long expectedActiveCount = createdUsers.stream().filter(User::getIsActive).count();
+        assertEquals(expectedActiveCount, fetchedUsers.size());
+    }
+
+    @Then("only inactive users should be returned")
+    public void onlyInactiveUsersShouldBeReturned() {
+        assertNotNull(fetchedUsers);
+        for (User fetchedUser : fetchedUsers) {
+            assertFalse(fetchedUser.getIsActive());
+        }
+        long expectedInactiveCount = createdUsers.stream().filter(user -> !user.getIsActive()).count();
+        assertEquals(expectedInactiveCount, fetchedUsers.size());
     }
 }
