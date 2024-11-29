@@ -21,3 +21,4 @@ checkpoints:
         aUsersMustHaveAFirstAndLastName:
           glue: true
           service: true
+          done: true
