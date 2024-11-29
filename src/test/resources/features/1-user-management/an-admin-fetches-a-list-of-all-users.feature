@@ -19,7 +19,6 @@ Feature: An admin fetches a list of all users
       When the admin requests a list of inactive users
       Then only inactive users should be returned
 
-  @not-implemented
   Rule: The admin receives an empty list if there are no users
 
     Example: Fetching users when none exist

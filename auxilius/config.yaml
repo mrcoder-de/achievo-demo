@@ -40,3 +40,4 @@ checkpoints:
           done: true
         theAdminReceivesAnEmptyListIfThereAreNoUsers:
           glue: true
+          service: true
