@@ -49,3 +49,4 @@ checkpoints:
         theAdminCanShouldFindAnExistingUser:
           glue: true
           service: true
+          done: true
