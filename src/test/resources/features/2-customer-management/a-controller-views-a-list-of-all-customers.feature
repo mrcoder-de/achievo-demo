@@ -14,7 +14,6 @@ Feature: A controller views a list of all customers
       When the controller requests the list of customers with the filter "Acme"
       Then the controller should receive a list containing 2 customers
 
-  @not-implemented
   Rule: The controller receives an empty list if there are no customers
 
     Example: Fetching customers when no customers exist
