@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: "achievo"
+  datasource:
+    url: "${DATASOURCE_URL}"
+    username: "${DATASOURCE_USER}"
+    password: "${DATASOURCE_PASS}"
+    driver-class-name: "${DATASOURCE_DRIVER}"
+  jpa:
+    hibernate:
+      ddl-auto: "none"
