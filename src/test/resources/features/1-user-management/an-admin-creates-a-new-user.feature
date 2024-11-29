@@ -24,7 +24,6 @@ Feature: An admin creates a new user
       When the admin attempts to create the user
       Then a user-management error should occur with the message "Last name cannot be empty"
 
-  @not-implemented
   Rule: A user cannot be created if another user with the same email address exists
 
     Example: Creating a user with an existing email address

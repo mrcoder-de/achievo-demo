@@ -24,3 +24,4 @@ checkpoints:
           done: true
         aUserCannotBeCreatedIfAnotherUserWithTheSameEmailAddressExists:
           glue: true
+          service: true

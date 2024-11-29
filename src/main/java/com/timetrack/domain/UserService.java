@@ -27,6 +27,9 @@ public class UserService {
         if (!isValidLastName(user.getLastName())) {
             throw new InvalidUserLastNameException("Last name cannot be empty");
         }
+        if (userExistsWithEmail(user.getEmail())) {
+            throw new UserAlreadyExistsException("User with this email already exists");
+        }
         return userRepository.save(user);
     }
 
@@ -36,5 +39,9 @@ public class UserService {
 
     private boolean isValidLastName(String lastName) {
         return lastName != null && !lastName.trim().isEmpty();
+    }
+
+    private boolean userExistsWithEmail(String email) {
+        return userRepository.existsById(email);
     }
 }
