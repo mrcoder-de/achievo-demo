@@ -1,2 +1,5 @@
-module: Achievo
-package: com.timetrack
+---
+module: "Achievo"
+package: "com.timetrack"
+checkpoints:
+  setup: true
