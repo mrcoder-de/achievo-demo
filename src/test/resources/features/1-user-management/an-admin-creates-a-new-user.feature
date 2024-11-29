@@ -12,7 +12,6 @@ Feature: An admin creates a new user
       When the admin attempts to create the user
       Then the user should be successfully created
 
-  @not-implemented
   Rule: A users must have a first and last name
 
     Example: Creating a user with empty first name

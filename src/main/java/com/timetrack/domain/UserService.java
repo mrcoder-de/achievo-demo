@@ -21,6 +21,20 @@ public class UserService {
         if (!isValidEmail(user.getEmail())) {
             throw new InvalidUserEmailException("Invalid user email address");
         }
+        if (!isValidFirstName(user.getFirstName())) {
+            throw new InvalidUserFirstNameException("First name cannot be empty");
+        }
+        if (!isValidLastName(user.getLastName())) {
+            throw new InvalidUserLastNameException("Last name cannot be empty");
+        }
         return userRepository.save(user);
+    }
+
+    private boolean isValidFirstName(String firstName) {
+        return firstName != null && !firstName.trim().isEmpty();
+    }
+
+    private boolean isValidLastName(String lastName) {
+        return lastName != null && !lastName.trim().isEmpty();
     }
 }
