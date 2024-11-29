@@ -1,6 +1,7 @@
 package com.timetrack.steps;
 
 import com.timetrack.actions.CreateNewCustomerWithRequiredInformation;
+import com.timetrack.actions.ModifyExistingCustomerDetails;
 import com.timetrack.domain.Customer;
 import com.timetrack.domain.CustomerRepository;
 import io.cucumber.java.en.Given;
@@ -18,6 +19,9 @@ public class CustomerManagementSteps {
 
     @Autowired
     private CreateNewCustomerWithRequiredInformation createNewCustomerAction;
+
+    @Autowired
+    private ModifyExistingCustomerDetails modifyExistingCustomerAction;
 
     @Autowired
     private CustomerRepository customerRepository;
@@ -65,5 +69,32 @@ public class CustomerManagementSteps {
     public void aCustomerManagementErrorShouldOccurWithTheMessage(String errorMessage) {
         assertNotNull(thrownException);
         assertEquals(errorMessage, thrownException.getMessage());
+    }
+
+    @Given("a customer {string} in the system")
+    public void aCustomerInTheSystem(String customerName) {
+        customer = new Customer();
+        customer.setName(customerName);
+        customer.setContactEmail("contact@" + customerName.toLowerCase().replace(" ", "") + ".com");
+        customer.setPhoneNumber("1234567890");
+        customer.setBillingAddress("123 Main St, City, Country");
+        customer = customerRepository.save(customer);
+    }
+
+    @When("the controller updates the customer's name to {string}")
+    public void theControllerUpdatesTheCustomerSNameTo(String newName) {
+        try {
+            customer.setName(newName);
+            customer = modifyExistingCustomerAction.execute(customer);
+        } catch (Exception e) {
+            thrownException = e;
+        }
+    }
+
+    @Then("the customer's name should be changed to {string}")
+    public void theCustomerSNameShouldBeChangedTo(String expectedName) {
+        Customer updatedCustomer = customerRepository.findById(customer.getCustomerId()).orElse(null);
+        assertNotNull(updatedCustomer);
+        assertEquals(expectedName, updatedCustomer.getName());
     }
 }
