@@ -32,3 +32,4 @@ checkpoints:
         actionClassName: "FetchAllUsersWithActiveFilter"
         theAdminCanFetchAListOfAllUsers:
           glue: true
+          service: true

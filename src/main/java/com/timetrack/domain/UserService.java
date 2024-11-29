@@ -2,6 +2,7 @@ package com.timetrack.domain;
 
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
+import java.util.List;
 import java.util.regex.Pattern;
 
 @Service
@@ -43,5 +44,9 @@ public class UserService {
 
     private boolean userExistsWithEmail(String email) {
         return userRepository.existsById(email);
+    }
+
+    public List<User> fetchAllUsers() {
+        return userRepository.findAll();
     }
 }
