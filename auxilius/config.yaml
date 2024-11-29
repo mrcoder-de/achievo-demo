@@ -72,3 +72,5 @@ checkpoints:
       aControllerCreatesANewCustomer:
         action: true
         actionClassName: "CreateNewCustomerWithRequiredInformation"
+        customerMustHaveAName,ContactEmail,PhoneNumberAndBillingAddress:
+          glue: true
