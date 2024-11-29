@@ -68,3 +68,7 @@ checkpoints:
           done: true
         done: true
       done: true
+    customerManagement:
+      aControllerCreatesANewCustomer:
+        action: true
+        actionClassName: "CreateNewCustomerWithRequiredInformation"
