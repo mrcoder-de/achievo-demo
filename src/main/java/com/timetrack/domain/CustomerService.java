@@ -20,6 +20,24 @@ public class CustomerService {
         return customerRepository.save(customer);
     }
 
+    public Customer updateCustomer(Customer customer) {
+        if (customer.getCustomerId() == null) {
+            throw new IllegalArgumentException("Customer ID must be provided for update");
+        }
+        
+        Customer existingCustomer = customerRepository.findById(customer.getCustomerId())
+                .orElseThrow(() -> new CustomerNotFoundException("Customer not found"));
+
+        validateCustomer(customer);
+        
+        existingCustomer.setName(customer.getName());
+        existingCustomer.setContactEmail(customer.getContactEmail());
+        existingCustomer.setPhoneNumber(customer.getPhoneNumber());
+        existingCustomer.setBillingAddress(customer.getBillingAddress());
+        
+        return customerRepository.save(existingCustomer);
+    }
+
     private void validateCustomer(Customer customer) {
         if (customer.getName() == null || customer.getName().trim().isEmpty() ||
             customer.getContactEmail() == null || customer.getContactEmail().trim().isEmpty() ||

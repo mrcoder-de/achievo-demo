@@ -90,3 +90,4 @@ checkpoints:
         actionClassName: "ModifyExistingCustomerDetails"
         theControllerCanModifyAllFieldsOfACustomer:
           glue: true
+          service: true
