@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
+import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -145,5 +146,24 @@ public class CustomerManagementSteps {
     public void theControllerShouldReceiveAListContainingCustomers(int expectedCount) {
         assertNotNull(fetchedCustomers);
         assertEquals(expectedCount, fetchedCustomers.size());
+    }
+
+    @Given("there are customers named {string}, {string}, and {string} in the system")
+    public void thereAreCustomersNamedInTheSystem(String customer1, String customer2, String customer3) {
+        customerRepository.deleteAll();
+        List<String> customerNames = Arrays.asList(customer1, customer2, customer3);
+        for (String customerName : customerNames) {
+            Customer newCustomer = new Customer();
+            newCustomer.setName(customerName);
+            newCustomer.setContactEmail("contact@" + customerName.toLowerCase().replace(" ", "") + ".com");
+            newCustomer.setPhoneNumber("1234567890");
+            newCustomer.setBillingAddress("123 Main St, City, Country");
+            customerRepository.save(newCustomer);
+        }
+    }
+
+    @When("the controller requests the list of customers with the filter {string}")
+    public void theControllerRequestsTheListOfCustomersWithTheFilter(String filter) {
+        fetchedCustomers = fetchFilterableListOfAllCustomersAction.execute(filter);
     }
 }
