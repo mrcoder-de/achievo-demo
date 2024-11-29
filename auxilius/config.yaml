@@ -10,3 +10,7 @@ checkpoints:
     - "1-user-management"
     - "2-customer-management"
     - "3-cost-center-management"
+    userManagement:
+      anAdminCreatesANewUser:
+        action: true
+        actionClassName: "CreateNewUserByAdmin"
