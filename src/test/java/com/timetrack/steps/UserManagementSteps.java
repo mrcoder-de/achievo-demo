@@ -186,6 +186,21 @@ public class UserManagementSteps {
         }
     }
 
+    @When("the admin attempts to modify the user")
+    public void theAdminAttemptsToModifyTheUser() {
+        User nonExistentUser = new User();
+        nonExistentUser.setEmail(nonExistentEmail);
+        nonExistentUser.setFirstName("NonExistent");
+        nonExistentUser.setLastName("User");
+        nonExistentUser.setIsActive(true);
+
+        try {
+            modifyExistingUserByAdmin.execute(nonExistentUser);
+        } catch (Exception e) {
+            thrownException = e;
+        }
+    }
+
     @Then("a user-management error should occur with the message {string}")
     public void aUserManagementErrorShouldOccurWithTheMessage(String errorMessage) {
         assertNotNull(thrownException);
