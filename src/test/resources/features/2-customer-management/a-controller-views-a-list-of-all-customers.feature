@@ -7,7 +7,6 @@ Feature: A controller views a list of all customers
       When the controller requests the list of all customers
       Then the controller should receive a list containing 3 customers
 
-  @not-implemented
   Rule: The controller can filter the list by providing part of the customer name
 
     Example: Filtering customers by partial name

@@ -13,6 +13,6 @@ public class FetchFilterableListOfAllCustomers {
     private CustomerService customerService;
 
     public List<Customer> execute(String nameFilter) {
-        return customerService.fetchAllCustomers();
+        return customerService.fetchAllCustomers(nameFilter);
     }
 }

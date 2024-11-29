@@ -39,8 +39,11 @@ public class CustomerService {
         return customerRepository.save(existingCustomer);
     }
 
-    public List<Customer> fetchAllCustomers() {
-        return customerRepository.findAll();
+    public List<Customer> fetchAllCustomers(String nameFilter) {
+        if (nameFilter == null || nameFilter.trim().isEmpty()) {
+            return customerRepository.findAll();
+        }
+        return customerRepository.findByNameContainingIgnoreCase(nameFilter.trim());
     }
 
     private void validateCustomer(Customer customer) {

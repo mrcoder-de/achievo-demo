@@ -106,3 +106,4 @@ checkpoints:
           done: true
         theControllerCanFilterTheListByProvidingPartOfTheCustomerName:
           glue: true
+          service: true
