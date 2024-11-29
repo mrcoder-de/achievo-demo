@@ -55,3 +55,6 @@ checkpoints:
           service: true
           done: true
         done: true
+      anAdminModifiesAUser:
+        action: true
+        actionClassName: "ModifyExistingUserByAdmin"
