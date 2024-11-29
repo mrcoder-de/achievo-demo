@@ -14,3 +14,5 @@ checkpoints:
       anAdminCreatesANewUser:
         action: true
         actionClassName: "CreateNewUserByAdmin"
+        aUserMustHaveAValidEmailAddress:
+          glue: true
