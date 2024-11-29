@@ -75,3 +75,4 @@ checkpoints:
         customerMustHaveAName,ContactEmail,PhoneNumberAndBillingAddress:
           glue: true
           service: true
+          done: true
