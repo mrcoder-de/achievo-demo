@@ -103,3 +103,4 @@ checkpoints:
         theControllerCanFetchAListOfAllCustomers:
           glue: true
           service: true
+          done: true
