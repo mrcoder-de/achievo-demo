@@ -1,0 +1,3 @@
+feature:
+  name: User Management
+  package: users
