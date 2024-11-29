@@ -12,7 +12,6 @@ Feature: A controller creates a new customer
       When the controller attempts to create the customer
       Then a customer-management error should occur with the message "Missing required fields"
 
-  @not-implemented
   Rule: Customer must have a valid contact email
 
     Example: Creating a customer with an invalid email

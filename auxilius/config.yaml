@@ -78,3 +78,4 @@ checkpoints:
           done: true
         customerMustHaveAValidContactEmail:
           glue: true
+          service: true
