@@ -3,3 +3,10 @@ module: "Achievo"
 package: "com.timetrack"
 checkpoints:
   setup: true
+  model: true
+  features:
+    sorted: true
+    sorting:
+    - "1-user-management"
+    - "2-customer-management"
+    - "3-cost-center-management"
