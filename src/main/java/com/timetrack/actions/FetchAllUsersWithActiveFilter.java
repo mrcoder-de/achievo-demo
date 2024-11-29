@@ -13,6 +13,6 @@ public class FetchAllUsersWithActiveFilter {
     private UserService userService;
 
     public List<User> execute(Boolean activeFilter) {
-        return userService.fetchAllUsers();
+        return userService.fetchAllUsers(activeFilter);
     }
 }

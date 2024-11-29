@@ -46,7 +46,10 @@ public class UserService {
         return userRepository.existsById(email);
     }
 
-    public List<User> fetchAllUsers() {
-        return userRepository.findAll();
+    public List<User> fetchAllUsers(Boolean activeFilter) {
+        if (activeFilter == null) {
+            return userRepository.findAll();
+        }
+        return userRepository.findByIsActive(activeFilter);
     }
 }

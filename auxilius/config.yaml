@@ -36,3 +36,4 @@ checkpoints:
           done: true
         theAdminCanFilterTheListByActive/inactive:
           glue: true
+          service: true

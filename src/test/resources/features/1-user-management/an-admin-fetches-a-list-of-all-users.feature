@@ -7,7 +7,6 @@ Feature: An admin fetches a list of all users
       When the admin requests a list of all users
       Then all users should be returned
 
-  @not-implemented
   Rule: The admin can filter the list by active/inactive
 
     Example: Fetching only active users
