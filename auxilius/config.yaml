@@ -112,3 +112,4 @@ checkpoints:
           glue: true
           service: true
           done: true
+        done: true
