@@ -33,3 +33,4 @@ checkpoints:
         theAdminCanFetchAListOfAllUsers:
           glue: true
           service: true
+          done: true
