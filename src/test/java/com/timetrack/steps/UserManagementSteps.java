@@ -41,6 +41,22 @@ public class UserManagementSteps {
         user.setLastName("Doe");
     }
 
+    @Given("a user with an empty first name")
+    public void aUserWithAnEmptyFirstName() {
+        user = new User();
+        user.setEmail("john.doe@example.com");
+        user.setFirstName("");
+        user.setLastName("Doe");
+    }
+
+    @Given("a user with an empty last name")
+    public void aUserWithAnEmptyLastName() {
+        user = new User();
+        user.setEmail("john.doe@example.com");
+        user.setFirstName("John");
+        user.setLastName("");
+    }
+
     @When("the admin attempts to create the user")
     public void theAdminAttemptsToCreateTheUser() {
         try {
