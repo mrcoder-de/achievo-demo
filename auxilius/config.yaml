@@ -79,3 +79,4 @@ checkpoints:
         customerMustHaveAValidContactEmail:
           glue: true
           service: true
+          done: true
