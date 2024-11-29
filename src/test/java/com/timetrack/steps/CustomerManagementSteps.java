@@ -166,4 +166,15 @@ public class CustomerManagementSteps {
     public void theControllerRequestsTheListOfCustomersWithTheFilter(String filter) {
         fetchedCustomers = fetchFilterableListOfAllCustomersAction.execute(filter);
     }
+
+    @Given("there are no customers in the system")
+    public void thereAreNoCustomersInTheSystem() {
+        customerRepository.deleteAll();
+    }
+
+    @Then("the controller should receive an empty list of customers")
+    public void theControllerShouldReceiveAnEmptyListOfCustomers() {
+        assertNotNull(fetchedCustomers);
+        assertTrue(fetchedCustomers.isEmpty());
+    }
 }
