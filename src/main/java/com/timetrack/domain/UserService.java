@@ -52,4 +52,12 @@ public class UserService {
         }
         return userRepository.findByIsActive(activeFilter);
     }
+
+    public User findUserByEmail(String email) {
+        if (!isValidEmail(email)) {
+            throw new InvalidUserEmailException("Invalid user email address");
+        }
+        return userRepository.findById(email)
+                .orElseThrow(() -> new UserNotFoundException("User with provided email not found"));
+    }
 }
