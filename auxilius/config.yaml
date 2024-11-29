@@ -100,3 +100,5 @@ checkpoints:
       aControllerViewsAListOfAllCustomers:
         action: true
         actionClassName: "FetchFilterableListOfAllCustomers"
+        theControllerCanFetchAListOfAllCustomers:
+          glue: true

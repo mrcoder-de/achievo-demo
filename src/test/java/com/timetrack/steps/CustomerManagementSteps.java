@@ -2,6 +2,7 @@ package com.timetrack.steps;
 
 import com.timetrack.actions.CreateNewCustomerWithRequiredInformation;
 import com.timetrack.actions.ModifyExistingCustomerDetails;
+import com.timetrack.actions.FetchFilterableListOfAllCustomers;
 import com.timetrack.domain.Customer;
 import com.timetrack.domain.CustomerRepository;
 import io.cucumber.java.en.Given;
@@ -9,6 +10,8 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -22,10 +25,14 @@ public class CustomerManagementSteps {
     private ModifyExistingCustomerDetails modifyExistingCustomerAction;
 
     @Autowired
+    private FetchFilterableListOfAllCustomers fetchFilterableListOfAllCustomersAction;
+
+    @Autowired
     private CustomerRepository customerRepository;
 
     private Customer customer;
     private Exception thrownException;
+    private List<Customer> fetchedCustomers;
 
     @Given("a new customer with name {string}, email {string}, phone {string}, and address {string}")
     public void aNewCustomerWithAllInformation(String name, String email, String phone, String address) {
@@ -114,5 +121,29 @@ public class CustomerManagementSteps {
         } catch (Exception e) {
             thrownException = e;
         }
+    }
+
+    @Given("there are {int} customers in the system")
+    public void thereAreCustomersInTheSystem(int customerCount) {
+        customerRepository.deleteAll();
+        for (int i = 0; i < customerCount; i++) {
+            Customer newCustomer = new Customer();
+            newCustomer.setName("Customer " + (i + 1));
+            newCustomer.setContactEmail("customer" + (i + 1) + "@example.com");
+            newCustomer.setPhoneNumber("123456789" + i);
+            newCustomer.setBillingAddress("Address " + (i + 1));
+            customerRepository.save(newCustomer);
+        }
+    }
+
+    @When("the controller requests the list of all customers")
+    public void theControllerRequestsTheListOfAllCustomers() {
+        fetchedCustomers = fetchFilterableListOfAllCustomersAction.execute(null);
+    }
+
+    @Then("the controller should receive a list containing {int} customers")
+    public void theControllerShouldReceiveAListContainingCustomers(int expectedCount) {
+        assertNotNull(fetchedCustomers);
+        assertEquals(expectedCount, fetchedCustomers.size());
     }
 }
