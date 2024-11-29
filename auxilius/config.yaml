@@ -60,3 +60,4 @@ checkpoints:
         actionClassName: "ModifyExistingUserByAdmin"
         theAdminCanModifyAllFieldsOfAUser:
           glue: true
+          service: true

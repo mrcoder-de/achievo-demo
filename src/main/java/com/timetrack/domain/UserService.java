@@ -60,4 +60,24 @@ public class UserService {
         return userRepository.findById(email)
                 .orElseThrow(() -> new UserNotFoundException("User with provided email not found"));
     }
+
+    public User updateUser(User updatedUser) {
+        if (!isValidEmail(updatedUser.getEmail())) {
+            throw new InvalidUserEmailException("Invalid user email address");
+        }
+        if (!isValidFirstName(updatedUser.getFirstName())) {
+            throw new InvalidUserFirstNameException("First name cannot be empty");
+        }
+        if (!isValidLastName(updatedUser.getLastName())) {
+            throw new InvalidUserLastNameException("Last name cannot be empty");
+        }
+        
+        User existingUser = findUserByEmail(updatedUser.getEmail());
+        
+        existingUser.setFirstName(updatedUser.getFirstName());
+        existingUser.setLastName(updatedUser.getLastName());
+        existingUser.setIsActive(updatedUser.getIsActive());
+        
+        return userRepository.save(existingUser);
+    }
 }

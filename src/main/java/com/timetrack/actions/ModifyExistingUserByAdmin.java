@@ -1,12 +1,17 @@
 package com.timetrack.actions;
 
 import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.annotation.Autowired;
 import com.timetrack.domain.User;
+import com.timetrack.domain.UserService;
 
 @Component
 public class ModifyExistingUserByAdmin {
 
+    @Autowired
+    private UserService userService;
+
     public User execute(User modifiedUser) {
-        throw new UnsupportedOperationException("Not implemented yet");
+        return userService.updateUser(modifiedUser);
     }
 }
