@@ -99,6 +99,11 @@ public class UserManagementSteps {
         }
     }
 
+    @Given("no users exist in the system")
+    public void noUsersExistInTheSystem() {
+        userRepository.deleteAll();
+    }
+
     @When("the admin attempts to create the user")
     public void theAdminAttemptsToCreateTheUser() {
         try {
@@ -180,5 +185,11 @@ public class UserManagementSteps {
         }
         long expectedInactiveCount = createdUsers.stream().filter(user -> !user.getIsActive()).count();
         assertEquals(expectedInactiveCount, fetchedUsers.size());
+    }
+
+    @Then("an empty list should be returned")
+    public void anEmptyListShouldBeReturned() {
+        assertNotNull(fetchedUsers);
+        assertTrue(fetchedUsers.isEmpty());
     }
 }
