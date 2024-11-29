@@ -30,3 +30,5 @@ checkpoints:
       anAdminFetchesAListOfAllUsers:
         action: true
         actionClassName: "FetchAllUsersWithActiveFilter"
+        theAdminCanFetchAListOfAllUsers:
+          glue: true

@@ -1,6 +1,7 @@
 package com.timetrack.steps;
 
 import com.timetrack.actions.CreateNewUserByAdmin;
+import com.timetrack.actions.FetchAllUsersWithActiveFilter;
 import com.timetrack.domain.User;
 import com.timetrack.domain.UserRepository;
 import io.cucumber.java.en.Given;
@@ -9,9 +10,10 @@ import io.cucumber.java.en.When;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 public class UserManagementSteps {
@@ -20,11 +22,16 @@ public class UserManagementSteps {
     private CreateNewUserByAdmin createNewUserByAdmin;
 
     @Autowired
+    private FetchAllUsersWithActiveFilter fetchAllUsersWithActiveFilter;
+
+    @Autowired
     private UserRepository userRepository;
 
     private User user;
     private Exception thrownException;
     private User existingUser;
+    private List<User> createdUsers;
+    private List<User> fetchedUsers;
 
     @Given("a user with an invalid email")
     public void aUserWithAnInvalidEmail() {
@@ -67,6 +74,18 @@ public class UserManagementSteps {
         userRepository.save(existingUser);
     }
 
+    @Given("multiple users exist in the system")
+    public void multipleUsersExistInTheSystem() {
+        createdUsers = new ArrayList<>();
+        for (int i = 0; i < 5; i++) {
+            User newUser = new User();
+            newUser.setEmail("user" + i + "@example.com");
+            newUser.setFirstName("FirstName" + i);
+            newUser.setLastName("LastName" + i);
+            createdUsers.add(userRepository.save(newUser));
+        }
+    }
+
     @When("the admin attempts to create the user")
     public void theAdminAttemptsToCreateTheUser() {
         try {
@@ -89,6 +108,11 @@ public class UserManagementSteps {
         }
     }
 
+    @When("the admin requests a list of all users")
+    public void theAdminRequestsAListOfAllUsers() {
+        fetchedUsers = fetchAllUsersWithActiveFilter.execute(null);
+    }
+
     @Then("a user-management error should occur with the message {string}")
     public void aUserManagementErrorShouldOccurWithTheMessage(String errorMessage) {
         assertNotNull(thrownException);
@@ -104,5 +128,14 @@ public class UserManagementSteps {
         assertEquals(user.getEmail(), savedUser.getEmail());
         assertEquals(user.getFirstName(), savedUser.getFirstName());
         assertEquals(user.getLastName(), savedUser.getLastName());
+    }
+
+    @Then("all users should be returned")
+    public void allUsersShouldBeReturned() {
+        assertNotNull(fetchedUsers);
+        assertEquals(createdUsers.size(), fetchedUsers.size());
+        for (User createdUser : createdUsers) {
+            assertTrue(fetchedUsers.stream().anyMatch(u -> u.getEmail().equals(createdUser.getEmail())));
+        }
     }
 }
