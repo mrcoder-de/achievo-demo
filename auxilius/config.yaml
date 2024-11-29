@@ -83,3 +83,4 @@ checkpoints:
         customerMustHaveAValidPhoneNumber:
           glue: true
           service: true
+          done: true
