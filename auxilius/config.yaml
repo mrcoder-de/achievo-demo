@@ -61,3 +61,4 @@ checkpoints:
         theAdminCanModifyAllFieldsOfAUser:
           glue: true
           service: true
+          done: true
