@@ -7,7 +7,6 @@ Feature: An admin fetches a single user by email
       When the admin searches for the user with the users email address
       Then the user is found
 
-  @not-implemented
   Rule: If a user does not exist, an error should occur
 
     Example: Finding a non-existent user
