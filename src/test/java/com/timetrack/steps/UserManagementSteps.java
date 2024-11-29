@@ -2,6 +2,7 @@ package com.timetrack.steps;
 
 import com.timetrack.actions.CreateNewUserByAdmin;
 import com.timetrack.actions.FetchAllUsersWithActiveFilter;
+import com.timetrack.actions.FindUserByEmail;
 import com.timetrack.domain.User;
 import com.timetrack.domain.UserRepository;
 import io.cucumber.java.en.Given;
@@ -25,6 +26,9 @@ public class UserManagementSteps {
     private FetchAllUsersWithActiveFilter fetchAllUsersWithActiveFilter;
 
     @Autowired
+    private FindUserByEmail findUserByEmail;
+
+    @Autowired
     private UserRepository userRepository;
 
     private User user;
@@ -32,6 +36,7 @@ public class UserManagementSteps {
     private User existingUser;
     private List<User> createdUsers;
     private List<User> fetchedUsers;
+    private User foundUser;
 
     @Given("a user with an invalid email")
     public void aUserWithAnInvalidEmail() {
@@ -141,6 +146,15 @@ public class UserManagementSteps {
         fetchedUsers = fetchAllUsersWithActiveFilter.execute(false);
     }
 
+    @When("the admin searches for the user with the users email address")
+    public void theAdminSearchesForTheUserWithTheUsersEmailAddress() {
+        try {
+            foundUser = findUserByEmail.execute(existingUser.getEmail());
+        } catch (Exception e) {
+            thrownException = e;
+        }
+    }
+
     @Then("a user-management error should occur with the message {string}")
     public void aUserManagementErrorShouldOccurWithTheMessage(String errorMessage) {
         assertNotNull(thrownException);
@@ -191,5 +205,13 @@ public class UserManagementSteps {
     public void anEmptyListShouldBeReturned() {
         assertNotNull(fetchedUsers);
         assertTrue(fetchedUsers.isEmpty());
+    }
+
+    @Then("the user is found")
+    public void theUserIsFound() {
+        assertNotNull(foundUser);
+        assertEquals(existingUser.getEmail(), foundUser.getEmail());
+        assertEquals(existingUser.getFirstName(), foundUser.getFirstName());
+        assertEquals(existingUser.getLastName(), foundUser.getLastName());
     }
 }
