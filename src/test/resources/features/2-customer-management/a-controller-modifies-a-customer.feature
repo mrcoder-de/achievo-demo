@@ -7,7 +7,6 @@ Feature: A controller modifies a customer
       When the controller updates the customer's name to "Acme Industries"
       Then the customer's name should be changed to "Acme Industries"
 
-  @not-implemented
   Rule: If a customer does not exist, an error occurs
 
     Example: Attempting to modify a non-existent customer
