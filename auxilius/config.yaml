@@ -50,3 +50,5 @@ checkpoints:
           glue: true
           service: true
           done: true
+        ifAUserDoesNotExist,AnErrorShouldOccur:
+          glue: true

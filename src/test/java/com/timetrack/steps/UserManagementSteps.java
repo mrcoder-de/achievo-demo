@@ -37,6 +37,7 @@ public class UserManagementSteps {
     private List<User> createdUsers;
     private List<User> fetchedUsers;
     private User foundUser;
+    private String nonExistentEmail;
 
     @Given("a user with an invalid email")
     public void aUserWithAnInvalidEmail() {
@@ -109,6 +110,12 @@ public class UserManagementSteps {
         userRepository.deleteAll();
     }
 
+    @Given("an email address not assigned to any user")
+    public void anEmailAddressNotAssignedToAnyUser() {
+        nonExistentEmail = "nonexistent@example.com";
+        userRepository.deleteAll();
+    }
+
     @When("the admin attempts to create the user")
     public void theAdminAttemptsToCreateTheUser() {
         try {
@@ -149,7 +156,11 @@ public class UserManagementSteps {
     @When("the admin searches for the user with the users email address")
     public void theAdminSearchesForTheUserWithTheUsersEmailAddress() {
         try {
-            foundUser = findUserByEmail.execute(existingUser.getEmail());
+            if (existingUser != null) {
+                foundUser = findUserByEmail.execute(existingUser.getEmail());
+            } else {
+                foundUser = findUserByEmail.execute(nonExistentEmail);
+            }
         } catch (Exception e) {
             thrownException = e;
         }
