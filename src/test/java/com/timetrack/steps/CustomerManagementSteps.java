@@ -10,9 +10,7 @@ import io.cucumber.java.en.When;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 public class CustomerManagementSteps {
@@ -96,5 +94,25 @@ public class CustomerManagementSteps {
         Customer updatedCustomer = customerRepository.findById(customer.getCustomerId()).orElse(null);
         assertNotNull(updatedCustomer);
         assertEquals(expectedName, updatedCustomer.getName());
+    }
+
+    @Given("there is no customer with ID {long} in the system")
+    public void thereIsNoCustomerWithIDInTheSystem(Long customerId) {
+        assertFalse(customerRepository.existsById(customerId));
+    }
+
+    @When("the controller attempts to modify the customer with ID {long}")
+    public void theControllerAttemptsToModifyTheCustomerWithID(Long customerId) {
+        try {
+            Customer nonExistentCustomer = new Customer();
+            nonExistentCustomer.setCustomerId(customerId);
+            nonExistentCustomer.setName("Test Name");
+            nonExistentCustomer.setContactEmail("test@example.com");
+            nonExistentCustomer.setPhoneNumber("1234567890");
+            nonExistentCustomer.setBillingAddress("Test Address");
+            modifyExistingCustomerAction.execute(nonExistentCustomer);
+        } catch (Exception e) {
+            thrownException = e;
+        }
     }
 }

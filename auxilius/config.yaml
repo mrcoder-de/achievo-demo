@@ -92,3 +92,5 @@ checkpoints:
           glue: true
           service: true
           done: true
+        ifACustomerDoesNotExist,AnErrorOccurs:
+          glue: true
