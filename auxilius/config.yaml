@@ -17,3 +17,4 @@ checkpoints:
         aUserMustHaveAValidEmailAddress:
           glue: true
           service: true
+          done: true
