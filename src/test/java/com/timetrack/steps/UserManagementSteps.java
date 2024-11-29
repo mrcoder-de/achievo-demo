@@ -3,6 +3,7 @@ package com.timetrack.steps;
 import com.timetrack.actions.CreateNewUserByAdmin;
 import com.timetrack.actions.FetchAllUsersWithActiveFilter;
 import com.timetrack.actions.FindUserByEmail;
+import com.timetrack.actions.ModifyExistingUserByAdmin;
 import com.timetrack.domain.User;
 import com.timetrack.domain.UserRepository;
 import io.cucumber.java.en.Given;
@@ -29,6 +30,9 @@ public class UserManagementSteps {
     private FindUserByEmail findUserByEmail;
 
     @Autowired
+    private ModifyExistingUserByAdmin modifyExistingUserByAdmin;
+
+    @Autowired
     private UserRepository userRepository;
 
     private User user;
@@ -38,6 +42,7 @@ public class UserManagementSteps {
     private List<User> fetchedUsers;
     private User foundUser;
     private String nonExistentEmail;
+    private User modifiedUser;
 
     @Given("a user with an invalid email")
     public void aUserWithAnInvalidEmail() {
@@ -166,6 +171,21 @@ public class UserManagementSteps {
         }
     }
 
+    @When("the admin modifies all the user fields")
+    public void theAdminModifiesAllTheUserFields() {
+        modifiedUser = new User();
+        modifiedUser.setEmail(existingUser.getEmail());
+        modifiedUser.setFirstName("ModifiedFirstName");
+        modifiedUser.setLastName("ModifiedLastName");
+        modifiedUser.setIsActive(!existingUser.getIsActive());
+        
+        try {
+            modifiedUser = modifyExistingUserByAdmin.execute(modifiedUser);
+        } catch (Exception e) {
+            thrownException = e;
+        }
+    }
+
     @Then("a user-management error should occur with the message {string}")
     public void aUserManagementErrorShouldOccurWithTheMessage(String errorMessage) {
         assertNotNull(thrownException);
@@ -224,5 +244,16 @@ public class UserManagementSteps {
         assertEquals(existingUser.getEmail(), foundUser.getEmail());
         assertEquals(existingUser.getFirstName(), foundUser.getFirstName());
         assertEquals(existingUser.getLastName(), foundUser.getLastName());
+    }
+
+    @Then("the changes should be saved successfully")
+    public void theChangesShouldBeSavedSuccessfully() {
+        assertNotNull(modifiedUser);
+        User savedUser = userRepository.findById(modifiedUser.getEmail()).orElse(null);
+        assertNotNull(savedUser);
+        assertEquals(modifiedUser.getEmail(), savedUser.getEmail());
+        assertEquals(modifiedUser.getFirstName(), savedUser.getFirstName());
+        assertEquals(modifiedUser.getLastName(), savedUser.getLastName());
+        assertEquals(modifiedUser.getIsActive(), savedUser.getIsActive());
     }
 }

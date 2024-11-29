@@ -58,3 +58,5 @@ checkpoints:
       anAdminModifiesAUser:
         action: true
         actionClassName: "ModifyExistingUserByAdmin"
+        theAdminCanModifyAllFieldsOfAUser:
+          glue: true
