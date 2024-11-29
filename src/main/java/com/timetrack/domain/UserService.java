@@ -72,7 +72,8 @@ public class UserService {
             throw new InvalidUserLastNameException("Last name cannot be empty");
         }
         
-        User existingUser = findUserByEmail(updatedUser.getEmail());
+        User existingUser = userRepository.findById(updatedUser.getEmail())
+                .orElseThrow(() -> new UserNotFoundException("User with provided email not found"));
         
         existingUser.setFirstName(updatedUser.getFirstName());
         existingUser.setLastName(updatedUser.getLastName());

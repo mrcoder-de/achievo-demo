@@ -7,7 +7,6 @@ Feature: An admin modifies a user
       When the admin modifies all the user fields
       Then the changes should be saved successfully
 
-  @not-implemented
   Rule: If a user does not exist, an error should occur
 
     Example: Modifying a non-existent user

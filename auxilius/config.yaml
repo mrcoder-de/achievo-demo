@@ -64,3 +64,4 @@ checkpoints:
           done: true
         ifAUserDoesNotExist,AnErrorShouldOccur:
           glue: true
+          service: true
