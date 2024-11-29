@@ -2,6 +2,7 @@ package com.timetrack.domain;
 
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
+import java.util.List;
 import java.util.regex.Pattern;
 
 @Service
@@ -36,6 +37,10 @@ public class CustomerService {
         existingCustomer.setBillingAddress(customer.getBillingAddress());
         
         return customerRepository.save(existingCustomer);
+    }
+
+    public List<Customer> fetchAllCustomers() {
+        return customerRepository.findAll();
     }
 
     private void validateCustomer(Customer customer) {
