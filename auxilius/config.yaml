@@ -189,3 +189,4 @@ checkpoints:
         theControllerCanChangeTheNameAndStatus(active/inactive)OfAnActivity:
           glue: true
           service: true
+          done: true
