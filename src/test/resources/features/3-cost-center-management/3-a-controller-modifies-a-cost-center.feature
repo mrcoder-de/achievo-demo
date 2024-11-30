@@ -1,6 +1,5 @@
 Feature: A controller modifies a cost center
 
-  @not-implemented
   Rule: The controller can change the name, manager and status (active/inactive)
 
     Example: Changing the name of a cost center

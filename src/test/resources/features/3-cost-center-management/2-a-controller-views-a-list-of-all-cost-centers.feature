@@ -1,6 +1,5 @@
 Feature: A controller views a list of all cost centers
 
-  @not-implemented
   Rule: The controller can fetch a list of all cost centers
 
     Example: Fetching all cost centers
@@ -8,7 +7,6 @@ Feature: A controller views a list of all cost centers
       When the controller requests the list of all cost centers
       Then the system should return a list containing all cost centers
 
-  @not-implemented
   Rule: The controller receives an empty list if there are no cost centers
 
     Example: Fetching cost centers when none exist
@@ -16,7 +14,6 @@ Feature: A controller views a list of all cost centers
       When the controller requests the list of all cost centers
       Then the system should return an empty list of cost centers
 
-  @not-implemented
   Rule: The controller can filter the list by providing part of the cost center name
 
     Example: Filtering cost centers by partial name

@@ -7,9 +7,11 @@ import com.timetrack.domain.CostCenter;
 import com.timetrack.domain.CostCenterRepository;
 import com.timetrack.domain.User;
 import com.timetrack.domain.UserRepository;
+import io.cucumber.java.af.En;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -20,6 +22,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 public class CostManagementSteps {
+
+    @Autowired
+    EntityManager em;
 
     @Autowired
     private CreateCostCenterWithNameAndManager createCostCenterAction;
@@ -347,6 +352,7 @@ public class CostManagementSteps {
     @When("the controller changes the name of cost center {string} to {string}")
     public void theControllerChangesTheNameOfCostCenterTo(String oldName, String newName) {
         CostCenter existingCostCenter = costCenterRepository.findByNameContainingIgnoreCase(oldName).get(0);
+        em.detach(existingCostCenter);
         existingCostCenter.setName(newName);
         try {
             modifyCostCenterDetailsAction.execute(existingCostCenter);

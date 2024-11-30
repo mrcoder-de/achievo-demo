@@ -13,10 +13,6 @@ public class ModifyCostCenterDetails {
     private CostCenterService costCenterService;
 
     public CostCenter execute(CostCenter costCenter) throws CostCenterNameAlreadyExistsException {
-        try {
-            return costCenterService.updateCostCenterDetails(costCenter);
-        } catch (CostCenterNameAlreadyExistsException e) {
-            throw new CostCenterNameAlreadyExistsException("Cost center name already exists");
-        }
+        return costCenterService.updateCostCenterDetails(costCenter);
     }
 }
