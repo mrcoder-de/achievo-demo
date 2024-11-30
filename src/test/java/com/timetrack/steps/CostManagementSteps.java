@@ -3,11 +3,8 @@ package com.timetrack.steps;
 import com.timetrack.actions.CreateCostCenterWithNameAndManager;
 import com.timetrack.actions.FetchAndFilterCostCenters;
 import com.timetrack.actions.ModifyCostCenterDetails;
-import com.timetrack.domain.CostCenter;
-import com.timetrack.domain.CostCenterRepository;
-import com.timetrack.domain.User;
-import com.timetrack.domain.UserRepository;
-import io.cucumber.java.af.En;
+import com.timetrack.actions.CreateCostCenterActivity;
+import com.timetrack.domain.*;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -36,12 +33,19 @@ public class CostManagementSteps {
     private ModifyCostCenterDetails modifyCostCenterDetailsAction;
 
     @Autowired
+    private CreateCostCenterActivity createCostCenterActivityAction;
+
+    @Autowired
     private CostCenterRepository costCenterRepository;
 
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private CostCenterActivityRepository costCenterActivityRepository;
+
     private CostCenter costCenter;
+    private CostCenterActivity activity;
     private Exception thrownException;
     private List<CostCenter> fetchedCostCenters;
 
@@ -359,5 +363,50 @@ public class CostManagementSteps {
         } catch (Exception e) {
             thrownException = e;
         }
+    }
+
+    @Given("an existing cost center")
+    public void anExistingCostCenter() {
+        User manager = new User();
+        manager.setEmail("manager@example.com");
+        manager.setFirstName("John");
+        manager.setLastName("Doe");
+        userRepository.save(manager);
+
+        costCenter = new CostCenter();
+        costCenter.setName("Existing Cost Center");
+        costCenter.setManager(manager);
+        costCenter = costCenterRepository.save(costCenter);
+    }
+
+    @Given("a new activity with name {string} for the cost center")
+    public void aNewActivityWithNameForTheCostCenter(String activityName) {
+        activity = new CostCenterActivity();
+        activity.setName(activityName);
+        activity.setCostCenter(costCenter);
+    }
+
+    @Given("a new activity with no name")
+    public void aNewActivityWithNoName() {
+        activity = new CostCenterActivity();
+        activity.setCostCenter(costCenter);
+    }
+
+    @When("the new activity is created")
+    public void theNewActivityIsCreated() {
+        try {
+            activity = createCostCenterActivityAction.execute(costCenter, activity);
+        } catch (Exception e) {
+            thrownException = e;
+        }
+    }
+
+    @Then("the activity should be created successfully")
+    public void theActivityShouldBeCreatedSuccessfully() {
+        assertNotNull(activity.getActivityId());
+        CostCenterActivity savedActivity = costCenterActivityRepository.findById(activity.getActivityId()).orElse(null);
+        assertNotNull(savedActivity);
+        assertEquals(activity.getName(), savedActivity.getName());
+        assertEquals(costCenter.getCostCenterId(), savedActivity.getCostCenter().getCostCenterId());
     }
 }
