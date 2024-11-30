@@ -132,3 +132,4 @@ checkpoints:
         actionClassName: "FetchAndFilterCostCenters"
         theControllerCanFetchAListOfAllCostCenters:
           glue: true
+          service: true

@@ -2,6 +2,7 @@ package com.timetrack.domain;
 
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
+import java.util.List;
 
 @Service
 public class CostCenterService {
@@ -21,5 +22,9 @@ public class CostCenterService {
         costCenter.setIsActive(true);
         
         return costCenterRepository.save(costCenter);
+    }
+
+    public List<CostCenter> fetchAllCostCenters() {
+        return costCenterRepository.findAll();
     }
 }
