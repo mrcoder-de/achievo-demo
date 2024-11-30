@@ -188,4 +188,53 @@ public class CostManagementSteps {
         assertEquals(1, fetchedCostCenters.size());
         assertEquals(expectedCostCenterName, fetchedCostCenters.get(0).getName());
     }
+
+    @Given("there are both active and inactive cost centers in the system")
+    public void thereAreBothActiveAndInactiveCostCentersInTheSystem() {
+        User manager = new User();
+        manager.setEmail("manager@example.com");
+        manager.setFirstName("Manager");
+        manager.setLastName("Test");
+        userRepository.save(manager);
+
+        CostCenter activeCostCenter = new CostCenter();
+        activeCostCenter.setName("Active Cost Center");
+        activeCostCenter.setManager(manager);
+        activeCostCenter.setIsActive(true);
+        costCenterRepository.save(activeCostCenter);
+
+        CostCenter inactiveCostCenter = new CostCenter();
+        inactiveCostCenter.setName("Inactive Cost Center");
+        inactiveCostCenter.setManager(manager);
+        inactiveCostCenter.setIsActive(false);
+        costCenterRepository.save(inactiveCostCenter);
+    }
+
+    @When("the controller filters the list for active cost centers")
+    public void theControllerFiltersTheListForActiveCostCenters() {
+        fetchedCostCenters = fetchAndFilterCostCentersAction.execute(null, true);
+    }
+
+    @When("the controller filters the list for inactive cost centers")
+    public void theControllerFiltersTheListForInactiveCostCenters() {
+        fetchedCostCenters = fetchAndFilterCostCentersAction.execute(null, false);
+    }
+
+    @Then("the system should return a list containing only the active cost centers")
+    public void theSystemShouldReturnAListContainingOnlyTheActiveCostCenters() {
+        assertNotNull(fetchedCostCenters);
+        assertFalse(fetchedCostCenters.isEmpty());
+        for (CostCenter costCenter : fetchedCostCenters) {
+            assertTrue(costCenter.getIsActive());
+        }
+    }
+
+    @Then("the system should return a list containing only the inactive cost centers")
+    public void theSystemShouldReturnAListContainingOnlyTheInactiveCostCenters() {
+        assertNotNull(fetchedCostCenters);
+        assertFalse(fetchedCostCenters.isEmpty());
+        for (CostCenter costCenter : fetchedCostCenters) {
+            assertFalse(costCenter.getIsActive());
+        }
+    }
 }
