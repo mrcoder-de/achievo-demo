@@ -10,6 +10,9 @@ public class CostCenterService {
     @Autowired
     private CostCenterRepository costCenterRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
     public CostCenter createCostCenter(CostCenter costCenter) {
         if (costCenter.getName() == null || costCenter.getName().trim().isEmpty()) {
             throw new CostCenterValidationException("Cost center name is required");
@@ -36,5 +39,26 @@ public class CostCenterService {
             return costCenterRepository.findByNameContainingIgnoreCase(partialName.trim());
         }
         return costCenterRepository.findByNameContainingIgnoreCaseAndIsActive(partialName.trim(), isActive);
+    }
+
+    public CostCenter updateCostCenterDetails(CostCenter updatedCostCenter) {
+        CostCenter existingCostCenter = costCenterRepository.findById(updatedCostCenter.getCostCenterId())
+                .orElseThrow(() -> new CostCenterNotFoundException("Cost center not found"));
+
+        if (updatedCostCenter.getName() != null && !updatedCostCenter.getName().trim().isEmpty()) {
+            existingCostCenter.setName(updatedCostCenter.getName().trim());
+        }
+
+        if (updatedCostCenter.getManager() != null) {
+            User manager = userRepository.findById(updatedCostCenter.getManager().getEmail())
+                    .orElseThrow(() -> new UserNotFoundException("Manager not found"));
+            existingCostCenter.setManager(manager);
+        }
+
+        if (updatedCostCenter.getIsActive() != null) {
+            existingCostCenter.setIsActive(updatedCostCenter.getIsActive());
+        }
+
+        return costCenterRepository.save(existingCostCenter);
     }
 }
