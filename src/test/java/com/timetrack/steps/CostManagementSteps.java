@@ -1,6 +1,7 @@
 package com.timetrack.steps;
 
 import com.timetrack.actions.CreateCostCenterWithNameAndManager;
+import com.timetrack.actions.FetchAndFilterCostCenters;
 import com.timetrack.domain.CostCenter;
 import com.timetrack.domain.CostCenterRepository;
 import com.timetrack.domain.User;
@@ -11,6 +12,8 @@ import io.cucumber.java.en.When;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -20,6 +23,9 @@ public class CostManagementSteps {
     private CreateCostCenterWithNameAndManager createCostCenterAction;
 
     @Autowired
+    private FetchAndFilterCostCenters fetchAndFilterCostCentersAction;
+
+    @Autowired
     private CostCenterRepository costCenterRepository;
 
     @Autowired
@@ -27,6 +33,7 @@ public class CostManagementSteps {
 
     private CostCenter costCenter;
     private Exception thrownException;
+    private List<CostCenter> fetchedCostCenters;
 
     @Given("a new cost center with name {string} and manager {string}")
     public void aNewCostCenterWithNameAndManager(String name, String managerEmail) {
@@ -102,5 +109,42 @@ public class CostManagementSteps {
         CostCenter savedCostCenter = costCenterRepository.findById(costCenter.getCostCenterId()).orElse(null);
         assertNotNull(savedCostCenter);
         assertEquals("active".equals(status), savedCostCenter.getIsActive());
+    }
+
+    @Given("there are multiple cost centers in the system")
+    public void thereAreMultipleCostCentersInTheSystem() {
+        User manager1 = new User();
+        manager1.setEmail("manager1@example.com");
+        manager1.setFirstName("Manager");
+        manager1.setLastName("One");
+        userRepository.save(manager1);
+
+        User manager2 = new User();
+        manager2.setEmail("manager2@example.com");
+        manager2.setFirstName("Manager");
+        manager2.setLastName("Two");
+        userRepository.save(manager2);
+
+        CostCenter costCenter1 = new CostCenter();
+        costCenter1.setName("Cost Center 1");
+        costCenter1.setManager(manager1);
+        costCenterRepository.save(costCenter1);
+
+        CostCenter costCenter2 = new CostCenter();
+        costCenter2.setName("Cost Center 2");
+        costCenter2.setManager(manager2);
+        costCenterRepository.save(costCenter2);
+    }
+
+    @When("the controller requests the list of all cost centers")
+    public void theControllerRequestsTheListOfAllCostCenters() {
+        fetchedCostCenters = fetchAndFilterCostCentersAction.execute(null, null);
+    }
+
+    @Then("the system should return a list containing all cost centers")
+    public void theSystemShouldReturnAListContainingAllCostCenters() {
+        assertNotNull(fetchedCostCenters);
+        assertFalse(fetchedCostCenters.isEmpty());
+        assertEquals(costCenterRepository.count(), fetchedCostCenters.size());
     }
 }
