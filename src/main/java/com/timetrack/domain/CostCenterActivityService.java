@@ -31,4 +31,23 @@ public class CostCenterActivityService {
         }
         return costCenterActivityRepository.findByCostCenter(costCenter);
     }
+
+    public CostCenterActivity modifyCostCenterActivity(CostCenterActivity activity) {
+        if (activity.getActivityId() == null) {
+            throw new ActivityValidationException("Activity ID is required for modification");
+        }
+
+        CostCenterActivity existingActivity = costCenterActivityRepository.findById(activity.getActivityId())
+                .orElseThrow(() -> new ActivityNotFoundException("Activity not found"));
+
+        if (activity.getName() != null && !activity.getName().trim().isEmpty()) {
+            existingActivity.setName(activity.getName().trim());
+        }
+
+        if (activity.getIsActive() != null) {
+            existingActivity.setIsActive(activity.getIsActive());
+        }
+
+        return costCenterActivityRepository.save(existingActivity);
+    }
 }

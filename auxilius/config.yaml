@@ -188,3 +188,4 @@ checkpoints:
         actionClassName: "ModifyCostCenterActivity"
         theControllerCanChangeTheNameAndStatus(active/inactive)OfAnActivity:
           glue: true
+          service: true
