@@ -171,3 +171,6 @@ checkpoints:
           service: true
           done: true
         done: true
+      aControllerViewsAListOfAllCostCenterActivities:
+        action: true
+        actionClassName: "FetchAllActivitiesForCostCenter"
