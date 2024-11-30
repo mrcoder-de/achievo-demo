@@ -159,3 +159,6 @@ checkpoints:
           service: true
           done: true
         done: true
+      aControllerCreatesACostCenterActivity:
+        action: true
+        actionClassName: "CreateCostCenterActivity"
