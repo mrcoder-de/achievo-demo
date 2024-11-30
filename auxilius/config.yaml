@@ -150,3 +150,5 @@ checkpoints:
       aControllerModifiesACostCenter:
         action: true
         actionClassName: "ModifyCostCenterDetails"
+        theControllerCanChangeTheName,ManagerAndStatus(active/inactive):
+          glue: true

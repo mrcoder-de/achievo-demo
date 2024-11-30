@@ -2,6 +2,7 @@ package com.timetrack.steps;
 
 import com.timetrack.actions.CreateCostCenterWithNameAndManager;
 import com.timetrack.actions.FetchAndFilterCostCenters;
+import com.timetrack.actions.ModifyCostCenterDetails;
 import com.timetrack.domain.CostCenter;
 import com.timetrack.domain.CostCenterRepository;
 import com.timetrack.domain.User;
@@ -27,6 +28,9 @@ public class CostManagementSteps {
     private FetchAndFilterCostCenters fetchAndFilterCostCentersAction;
 
     @Autowired
+    private ModifyCostCenterDetails modifyCostCenterDetailsAction;
+
+    @Autowired
     private CostCenterRepository costCenterRepository;
 
     @Autowired
@@ -36,12 +40,114 @@ public class CostManagementSteps {
     private Exception thrownException;
     private List<CostCenter> fetchedCostCenters;
 
+    @Given("a cost center named {string} exists")
+    public void aCostCenterNamedExists(String name) {
+        User manager = new User();
+        manager.setEmail("default@example.com");
+        manager.setFirstName("Default");
+        manager.setLastName("Manager");
+        userRepository.save(manager);
+
+        costCenter = new CostCenter();
+        costCenter.setName(name);
+        costCenter.setManager(manager);
+        costCenter = costCenterRepository.save(costCenter);
+    }
+
+    @When("the controller changes the cost center name to {string}")
+    public void theControllerChangesTheCostCenterNameTo(String newName) {
+        costCenter.setName(newName);
+        try {
+            costCenter = modifyCostCenterDetailsAction.execute(costCenter);
+        } catch (Exception e) {
+            thrownException = e;
+        }
+    }
+
+    @Then("the cost center's name should be updated to {string}")
+    public void theCostCenterNameShouldBeUpdatedTo(String expectedName) {
+        CostCenter updatedCostCenter = costCenterRepository.findById(costCenter.getCostCenterId()).orElse(null);
+        assertNotNull(updatedCostCenter);
+        assertEquals(expectedName, updatedCostCenter.getName());
+    }
+
+    @Given("a cost center with manager {string} exists")
+    public void aCostCenterWithManagerExists(String managerEmail) {
+        User manager = new User();
+        manager.setEmail(managerEmail);
+        manager.setFirstName("John");
+        manager.setLastName("Doe");
+        userRepository.save(manager);
+
+        costCenter = new CostCenter();
+        costCenter.setName("Test Cost Center");
+        costCenter.setManager(manager);
+        costCenter = costCenterRepository.save(costCenter);
+    }
+
+    @When("the controller changes its manager to {string}")
+    public void theControllerChangesItsManagerTo(String newManagerEmail) {
+        User newManager = userRepository.findById(newManagerEmail).orElse(null);
+        if (newManager == null) {
+            newManager = new User();
+            newManager.setEmail(newManagerEmail);
+            newManager.setFirstName("Jane");
+            newManager.setLastName("Doe");
+            userRepository.save(newManager);
+        }
+        costCenter.setManager(newManager);
+        try {
+            costCenter = modifyCostCenterDetailsAction.execute(costCenter);
+        } catch (Exception e) {
+            thrownException = e;
+        }
+    }
+
+    @Then("the cost center's manager should be updated to {string}")
+    public void theCostCenterManagerShouldBeUpdatedTo(String expectedManagerEmail) {
+        CostCenter updatedCostCenter = costCenterRepository.findById(costCenter.getCostCenterId()).orElse(null);
+        assertNotNull(updatedCostCenter);
+        assertEquals(expectedManagerEmail, updatedCostCenter.getManager().getEmail());
+    }
+
+    @Given("an active cost center exists")
+    public void anActiveCostCenterExists() {
+        User manager = new User();
+        manager.setEmail("active@example.com");
+        manager.setFirstName("Active");
+        manager.setLastName("Manager");
+        userRepository.save(manager);
+
+        costCenter = new CostCenter();
+        costCenter.setName("Active Cost Center");
+        costCenter.setManager(manager);
+        costCenter.setIsActive(true);
+        costCenter = costCenterRepository.save(costCenter);
+    }
+
+    @When("the controller changes the cost center status to inactive")
+    public void theControllerChangesTheCostCenterStatusToInactive() {
+        costCenter.setIsActive(false);
+        try {
+            costCenter = modifyCostCenterDetailsAction.execute(costCenter);
+        } catch (Exception e) {
+            thrownException = e;
+        }
+    }
+
+    @Then("the cost center's status should be updated to inactive")
+    public void theCostCenterStatusShouldBeUpdatedToInactive() {
+        CostCenter updatedCostCenter = costCenterRepository.findById(costCenter.getCostCenterId()).orElse(null);
+        assertNotNull(updatedCostCenter);
+        assertFalse(updatedCostCenter.getIsActive());
+    }
+
     @Given("a new cost center with name {string} and manager {string}")
     public void aNewCostCenterWithNameAndManager(String name, String managerEmail) {
         User manager = new User();
         manager.setEmail(managerEmail);
-        manager.setFirstName("John"); // Placeholder first name
-        manager.setLastName("Doe"); // Placeholder last name
+        manager.setFirstName("John");
+        manager.setLastName("Doe");
         userRepository.save(manager);
 
         costCenter = new CostCenter();
@@ -53,8 +159,8 @@ public class CostManagementSteps {
     public void aNewCostCenterWithManagerAndNoName(String managerEmail) {
         User manager = new User();
         manager.setEmail(managerEmail);
-        manager.setFirstName("John"); // Placeholder first name
-        manager.setLastName("Doe"); // Placeholder last name
+        manager.setFirstName("John");
+        manager.setLastName("Doe");
         userRepository.save(manager);
 
         costCenter = new CostCenter();
@@ -71,8 +177,8 @@ public class CostManagementSteps {
     public void aNewCostCenterWithNameWithManager(String name, String managerEmail) {
         User manager = new User();
         manager.setEmail(managerEmail);
-        manager.setFirstName("Jane"); // Placeholder first name
-        manager.setLastName("Doe"); // Placeholder last name
+        manager.setFirstName("Jane");
+        manager.setLastName("Doe");
         userRepository.save(manager);
 
         costCenter = new CostCenter();
