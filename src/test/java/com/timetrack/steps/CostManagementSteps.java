@@ -147,4 +147,15 @@ public class CostManagementSteps {
         assertFalse(fetchedCostCenters.isEmpty());
         assertEquals(costCenterRepository.count(), fetchedCostCenters.size());
     }
+
+    @Given("there are no cost centers in the system")
+    public void thereAreNoCostCentersInTheSystem() {
+        costCenterRepository.deleteAll();
+    }
+
+    @Then("the system should return an empty list of cost centers")
+    public void theSystemShouldReturnAnEmptyListOfCostCenters() {
+        assertNotNull(fetchedCostCenters);
+        assertTrue(fetchedCostCenters.isEmpty());
+    }
 }
