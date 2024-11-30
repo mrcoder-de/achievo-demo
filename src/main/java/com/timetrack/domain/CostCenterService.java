@@ -24,10 +24,17 @@ public class CostCenterService {
         return costCenterRepository.save(costCenter);
     }
 
-    public List<CostCenter> fetchAllCostCenters(String partialName) {
+    public List<CostCenter> fetchAllCostCenters(String partialName, Boolean isActive) {
         if (partialName == null || partialName.trim().isEmpty()) {
-            return costCenterRepository.findAll();
+            if (isActive == null) {
+                return costCenterRepository.findAll();
+            } else {
+                return costCenterRepository.findByIsActive(isActive);
+            }
         }
-        return costCenterRepository.findByNameContainingIgnoreCase(partialName.trim());
+        if (isActive == null) {
+            return costCenterRepository.findByNameContainingIgnoreCase(partialName.trim());
+        }
+        return costCenterRepository.findByNameContainingIgnoreCaseAndIsActive(partialName.trim(), isActive);
     }
 }

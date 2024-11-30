@@ -13,6 +13,6 @@ public class FetchAndFilterCostCenters {
     private CostCenterService costCenterService;
 
     public List<CostCenter> execute(String partialName, Boolean isActive) {
-        return costCenterService.fetchAllCostCenters(partialName);
+        return costCenterService.fetchAllCostCenters(partialName, isActive);
     }
 }

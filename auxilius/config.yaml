@@ -144,3 +144,4 @@ checkpoints:
           done: true
         theControllerCanFilterTheListByActive/inactiveStatus:
           glue: true
+          service: true
