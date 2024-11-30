@@ -343,4 +343,15 @@ public class CostManagementSteps {
             assertFalse(costCenter.getIsActive());
         }
     }
+
+    @When("the controller changes the name of cost center {string} to {string}")
+    public void theControllerChangesTheNameOfCostCenterTo(String oldName, String newName) {
+        CostCenter existingCostCenter = costCenterRepository.findByNameContainingIgnoreCase(oldName).get(0);
+        existingCostCenter.setName(newName);
+        try {
+            modifyCostCenterDetailsAction.execute(existingCostCenter);
+        } catch (Exception e) {
+            thrownException = e;
+        }
+    }
 }

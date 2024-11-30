@@ -19,7 +19,7 @@ Feature: A controller modifies a cost center
 
   Rule: The controller cannot change the name of a cost center to an already existing cost center name
 
-    Example: Changing the name of a cost center
+    Example: Changing the name of a cost center when one already exists
       Given a cost center named "Marketing" exists
       Given a cost center named "Digital Marketing" exists
       When the controller changes the name of cost center "Marketing" to "Digital Marketing"
