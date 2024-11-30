@@ -153,3 +153,4 @@ checkpoints:
         theControllerCanChangeTheName,ManagerAndStatus(active/inactive):
           glue: true
           service: true
+          done: true
