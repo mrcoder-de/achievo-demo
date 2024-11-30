@@ -7,7 +7,6 @@ Feature: A controller views a list of all cost center activities
       When the controller requests the list of all activities for "Marketing"
       Then the system should return a list containing all activities for that cost center
 
-  @not-implemented
   Rule: The controller receives an empty list if there are no activities
 
     Example: Fetching activities when none exist for a cost center

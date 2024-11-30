@@ -180,3 +180,4 @@ checkpoints:
           done: true
         theControllerReceivesAnEmptyListIfThereAreNoActivities:
           glue: true
+          service: true
