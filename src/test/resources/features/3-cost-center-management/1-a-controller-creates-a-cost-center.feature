@@ -17,7 +17,6 @@ Feature: A controller creates a cost center
       When the cost center is created
       Then a cost-center-management error should occur with the message "Cost center manager is required"
 
-  @not-implemented
   Rule: A cost center is active by default
 
     Example: Verifying default active status

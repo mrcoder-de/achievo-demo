@@ -16,6 +16,10 @@ public class CostCenterService {
         if (costCenter.getManager() == null) {
             throw new CostCenterValidationException("Cost center manager is required");
         }
+        
+        // Ensure the cost center is set to active by default
+        costCenter.setIsActive(true);
+        
         return costCenterRepository.save(costCenter);
     }
 }
