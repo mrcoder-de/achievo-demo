@@ -11,9 +11,7 @@ import io.cucumber.java.en.When;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 public class CostManagementSteps {
@@ -61,6 +59,19 @@ public class CostManagementSteps {
         costCenter.setName(name);
     }
 
+    @Given("a new cost center with name {string} with manager {string}")
+    public void aNewCostCenterWithNameWithManager(String name, String managerEmail) {
+        User manager = new User();
+        manager.setEmail(managerEmail);
+        manager.setFirstName("Jane"); // Placeholder first name
+        manager.setLastName("Doe"); // Placeholder last name
+        userRepository.save(manager);
+
+        costCenter = new CostCenter();
+        costCenter.setName(name);
+        costCenter.setManager(manager);
+    }
+
     @When("the cost center is created")
     public void theCostCenterIsCreated() {
         try {
@@ -83,5 +94,13 @@ public class CostManagementSteps {
     public void aCostCenterManagementErrorShouldOccurWithTheMessage(String errorMessage) {
         assertNotNull(thrownException);
         assertEquals(errorMessage, thrownException.getMessage());
+    }
+
+    @Then("the cost center's status should be set to {string}")
+    public void theCostCenterStatusShouldBeSetTo(String status) {
+        assertNotNull(costCenter.getCostCenterId());
+        CostCenter savedCostCenter = costCenterRepository.findById(costCenter.getCostCenterId()).orElse(null);
+        assertNotNull(savedCostCenter);
+        assertEquals("active".equals(status), savedCostCenter.getIsActive());
     }
 }
