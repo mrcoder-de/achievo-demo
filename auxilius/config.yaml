@@ -120,3 +120,4 @@ checkpoints:
         actionClassName: "CreateCostCenterWithNameAndManager"
         aCostCenterMustHaveANameAndAManager:
           glue: true
+          service: true
