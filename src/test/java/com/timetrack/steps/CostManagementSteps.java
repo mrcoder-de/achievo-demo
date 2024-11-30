@@ -464,4 +464,24 @@ public class CostManagementSteps {
             assertEquals(costCenter.getCostCenterId(), activity.getCostCenter().getCostCenterId());
         }
     }
+
+    @Given("a cost center {string} has no activities")
+    public void aCostCenterHasNoActivities(String costCenterName) {
+        User manager = new User();
+        manager.setEmail("manager@example.com");
+        manager.setFirstName("John");
+        manager.setLastName("Doe");
+        userRepository.save(manager);
+
+        costCenter = new CostCenter();
+        costCenter.setName(costCenterName);
+        costCenter.setManager(manager);
+        costCenter = costCenterRepository.save(costCenter);
+    }
+
+    @Then("the system should return an empty list of activities")
+    public void theSystemShouldReturnAnEmptyListOfActivities() {
+        assertNotNull(fetchedActivities);
+        assertTrue(fetchedActivities.isEmpty());
+    }
 }
