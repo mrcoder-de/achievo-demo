@@ -125,3 +125,4 @@ checkpoints:
         aCostCenterIsActiveByDefault:
           glue: true
           service: true
+          done: true
