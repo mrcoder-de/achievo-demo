@@ -1,9 +1,6 @@
 package com.timetrack.steps;
 
-import com.timetrack.actions.CreateCostCenterWithNameAndManager;
-import com.timetrack.actions.FetchAndFilterCostCenters;
-import com.timetrack.actions.ModifyCostCenterDetails;
-import com.timetrack.actions.CreateCostCenterActivity;
+import com.timetrack.actions.*;
 import com.timetrack.domain.*;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -36,6 +33,9 @@ public class CostManagementSteps {
     private CreateCostCenterActivity createCostCenterActivityAction;
 
     @Autowired
+    private FetchAllActivitiesForCostCenter fetchAllActivitiesForCostCenterAction;
+
+    @Autowired
     private CostCenterRepository costCenterRepository;
 
     @Autowired
@@ -48,6 +48,7 @@ public class CostManagementSteps {
     private CostCenterActivity activity;
     private Exception thrownException;
     private List<CostCenter> fetchedCostCenters;
+    private List<CostCenterActivity> fetchedActivities;
 
     @Given("a cost center named {string} exists")
     public void aCostCenterNamedExists(String name) {
@@ -423,5 +424,44 @@ public class CostManagementSteps {
         CostCenterActivity savedActivity = costCenterActivityRepository.findById(activity.getActivityId()).orElse(null);
         assertNotNull(savedActivity);
         assertEquals("active".equals(status), savedActivity.getIsActive());
+    }
+
+    @Given("a cost center {string} has multiple activities")
+    public void aCostCenterHasMultipleActivities(String costCenterName) {
+        User manager = new User();
+        manager.setEmail("manager@example.com");
+        manager.setFirstName("John");
+        manager.setLastName("Doe");
+        userRepository.save(manager);
+
+        costCenter = new CostCenter();
+        costCenter.setName(costCenterName);
+        costCenter.setManager(manager);
+        costCenter = costCenterRepository.save(costCenter);
+
+        CostCenterActivity activity1 = new CostCenterActivity();
+        activity1.setName("Activity 1");
+        activity1.setCostCenter(costCenter);
+        costCenterActivityRepository.save(activity1);
+
+        CostCenterActivity activity2 = new CostCenterActivity();
+        activity2.setName("Activity 2");
+        activity2.setCostCenter(costCenter);
+        costCenterActivityRepository.save(activity2);
+    }
+
+    @When("the controller requests the list of all activities for {string}")
+    public void theControllerRequestsTheListOfAllActivitiesFor(String costCenterName) {
+        CostCenter fetchedCostCenter = costCenterRepository.findByNameIgnoreCase(costCenterName).get(0);
+        fetchedActivities = fetchAllActivitiesForCostCenterAction.execute(fetchedCostCenter);
+    }
+
+    @Then("the system should return a list containing all activities for that cost center")
+    public void theSystemShouldReturnAListContainingAllActivitiesForThatCostCenter() {
+        assertNotNull(fetchedActivities);
+        assertFalse(fetchedActivities.isEmpty());
+        for (CostCenterActivity activity : fetchedActivities) {
+            assertEquals(costCenter.getCostCenterId(), activity.getCostCenter().getCostCenterId());
+        }
     }
 }

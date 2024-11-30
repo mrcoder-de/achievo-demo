@@ -174,3 +174,5 @@ checkpoints:
       aControllerViewsAListOfAllCostCenterActivities:
         action: true
         actionClassName: "FetchAllActivitiesForCostCenter"
+        theControllerCanFetchAListOfAllActivitiesForACostCenter:
+          glue: true
