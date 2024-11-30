@@ -7,7 +7,6 @@ Feature: A controller views a list of all cost centers
       When the controller requests the list of all cost centers
       Then the system should return a list containing all cost centers
 
-  @not-implemented
   Rule: The controller receives an empty list if there are no cost centers
 
     Example: Fetching cost centers when none exist

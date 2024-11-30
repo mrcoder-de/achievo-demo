@@ -136,3 +136,4 @@ checkpoints:
           done: true
         theControllerReceivesAnEmptyListIfThereAreNoCostCenters:
           glue: true
+          service: true
