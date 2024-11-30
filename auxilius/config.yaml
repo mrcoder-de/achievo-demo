@@ -168,3 +168,4 @@ checkpoints:
           done: true
         anActivityIsActiveByDefault:
           glue: true
+          service: true

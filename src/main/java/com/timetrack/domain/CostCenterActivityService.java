@@ -15,6 +15,12 @@ public class CostCenterActivityService {
         }
         
         activity.setCostCenter(costCenter);
+        
+        // Ensure the activity is set to active by default
+        if (activity.getIsActive() == null) {
+            activity.setIsActive(true);
+        }
+        
         return costCenterActivityRepository.save(activity);
     }
 }

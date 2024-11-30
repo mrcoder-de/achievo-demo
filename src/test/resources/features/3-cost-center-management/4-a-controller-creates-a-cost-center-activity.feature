@@ -14,7 +14,6 @@ Feature: A controller creates a cost center activity
       When the new activity is created
       Then a cost-center-management error should occur with the message "Activity name is required"
 
-  @not-implemented
   Rule: An activity is active by default
 
     Example: Verifying default active status of a new activity
