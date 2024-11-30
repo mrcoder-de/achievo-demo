@@ -2,6 +2,7 @@ package com.timetrack.domain;
 
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
+import java.util.List;
 
 @Service
 public class CostCenterActivityService {
@@ -22,5 +23,12 @@ public class CostCenterActivityService {
         }
         
         return costCenterActivityRepository.save(activity);
+    }
+
+    public List<CostCenterActivity> fetchAllActivitiesForCostCenter(CostCenter costCenter) {
+        if (costCenter == null || costCenter.getCostCenterId() == null) {
+            throw new IllegalArgumentException("Valid cost center is required");
+        }
+        return costCenterActivityRepository.findByCostCenter(costCenter);
     }
 }
