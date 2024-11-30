@@ -121,3 +121,4 @@ checkpoints:
         aCostCenterMustHaveANameAndAManager:
           glue: true
           service: true
+          done: true
