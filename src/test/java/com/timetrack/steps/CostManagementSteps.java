@@ -409,4 +409,19 @@ public class CostManagementSteps {
         assertEquals(activity.getName(), savedActivity.getName());
         assertEquals(costCenter.getCostCenterId(), savedActivity.getCostCenter().getCostCenterId());
     }
+
+    @Given("a controller creates a new activity {string} for the cost center")
+    public void aControllerCreatesANewActivityForTheCostCenter(String activityName) {
+        activity = new CostCenterActivity();
+        activity.setName(activityName);
+        activity.setCostCenter(costCenter);
+    }
+
+    @Then("the activity's status should be set to {string}")
+    public void theActivityStatusShouldBeSetTo(String status) {
+        assertNotNull(activity.getActivityId());
+        CostCenterActivity savedActivity = costCenterActivityRepository.findById(activity.getActivityId()).orElse(null);
+        assertNotNull(savedActivity);
+        assertEquals("active".equals(status), savedActivity.getIsActive());
+    }
 }
