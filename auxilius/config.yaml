@@ -177,3 +177,4 @@ checkpoints:
         theControllerCanFetchAListOfAllActivitiesForACostCenter:
           glue: true
           service: true
+          done: true
