@@ -46,7 +46,11 @@ public class CostCenterService {
                 .orElseThrow(() -> new CostCenterNotFoundException("Cost center not found"));
 
         if (updatedCostCenter.getName() != null && !updatedCostCenter.getName().trim().isEmpty()) {
-            existingCostCenter.setName(updatedCostCenter.getName().trim());
+            String newName = updatedCostCenter.getName().trim();
+            if (!newName.equals(existingCostCenter.getName()) && checkCostCenterNameExists(newName, existingCostCenter.getCostCenterId())) {
+                throw new CostCenterNameAlreadyExistsException("Cost center name already exists");
+            }
+            existingCostCenter.setName(newName);
         }
 
         if (updatedCostCenter.getManager() != null) {
@@ -60,5 +64,11 @@ public class CostCenterService {
         }
 
         return costCenterRepository.save(existingCostCenter);
+    }
+
+    private boolean checkCostCenterNameExists(String name, Long excludeId) {
+        List<CostCenter> costCenters = costCenterRepository.findByNameIgnoreCase(name);
+        return costCenters.stream()
+                .anyMatch(cc -> !cc.getCostCenterId().equals(excludeId));
     }
 }

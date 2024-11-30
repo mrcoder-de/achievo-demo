@@ -9,4 +9,5 @@ public interface CostCenterRepository extends JpaRepository<CostCenter, Long> {
     List<CostCenter> findByNameContainingIgnoreCase(String partialName);
     List<CostCenter> findByIsActive(Boolean isActive);
     List<CostCenter> findByNameContainingIgnoreCaseAndIsActive(String partialName, Boolean isActive);
+    List<CostCenter> findByNameIgnoreCase(String name);
 }

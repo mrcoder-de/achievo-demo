@@ -156,3 +156,4 @@ checkpoints:
           done: true
         theControllerCannotChangeTheNameOfACostCenterToAnAlreadyExistingCostCenterName:
           glue: true
+          service: true
