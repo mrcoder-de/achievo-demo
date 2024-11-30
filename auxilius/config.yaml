@@ -133,3 +133,4 @@ checkpoints:
         theControllerCanFetchAListOfAllCostCenters:
           glue: true
           service: true
+          done: true
