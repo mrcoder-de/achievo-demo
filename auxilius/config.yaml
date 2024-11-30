@@ -114,3 +114,7 @@ checkpoints:
           done: true
         done: true
       done: true
+    costManagement:
+      aControllerCreatesACostCenter:
+        action: true
+        actionClassName: "CreateCostCenterWithNameAndManager"
