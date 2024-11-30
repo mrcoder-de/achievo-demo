@@ -24,7 +24,10 @@ public class CostCenterService {
         return costCenterRepository.save(costCenter);
     }
 
-    public List<CostCenter> fetchAllCostCenters() {
-        return costCenterRepository.findAll();
+    public List<CostCenter> fetchAllCostCenters(String partialName) {
+        if (partialName == null || partialName.trim().isEmpty()) {
+            return costCenterRepository.findAll();
+        }
+        return costCenterRepository.findByNameContainingIgnoreCase(partialName.trim());
     }
 }

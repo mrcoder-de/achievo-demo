@@ -140,3 +140,4 @@ checkpoints:
           done: true
         theControllerCanFilterTheListByProvidingPartOfTheCostCenterName:
           glue: true
+          service: true
