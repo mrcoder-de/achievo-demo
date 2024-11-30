@@ -36,6 +36,9 @@ public class CostManagementSteps {
     private FetchAllActivitiesForCostCenter fetchAllActivitiesForCostCenterAction;
 
     @Autowired
+    private ModifyCostCenterActivity modifyCostCenterActivityAction;
+
+    @Autowired
     private CostCenterRepository costCenterRepository;
 
     @Autowired
@@ -483,5 +486,56 @@ public class CostManagementSteps {
     public void theSystemShouldReturnAnEmptyListOfActivities() {
         assertNotNull(fetchedActivities);
         assertTrue(fetchedActivities.isEmpty());
+    }
+
+    @Given("an activity named {string} exists for the cost center")
+    public void anActivityNamedExistsForTheCostCenter(String activityName) {
+        activity = new CostCenterActivity();
+        activity.setName(activityName);
+        activity.setCostCenter(costCenter);
+        activity = costCenterActivityRepository.save(activity);
+    }
+
+    @When("the controller changes the activity name to {string}")
+    public void theControllerChangesTheActivityNameTo(String newName) {
+        activity.setName(newName);
+        try {
+            activity = modifyCostCenterActivityAction.execute(activity);
+        } catch (Exception e) {
+            thrownException = e;
+        }
+    }
+
+    @Then("the activity's name should be updated to {string}")
+    public void theActivityNameShouldBeUpdatedTo(String expectedName) {
+        CostCenterActivity updatedActivity = costCenterActivityRepository.findById(activity.getActivityId()).orElse(null);
+        assertNotNull(updatedActivity);
+        assertEquals(expectedName, updatedActivity.getName());
+    }
+
+    @Given("an active activity exists for the cost center")
+    public void anActiveActivityExistsForTheCostCenter() {
+        activity = new CostCenterActivity();
+        activity.setName("Active Activity");
+        activity.setCostCenter(costCenter);
+        activity.setIsActive(true);
+        activity = costCenterActivityRepository.save(activity);
+    }
+
+    @When("the controller changes the activity status to inactive")
+    public void theControllerChangesTheActivityStatusToInactive() {
+        activity.setIsActive(false);
+        try {
+            activity = modifyCostCenterActivityAction.execute(activity);
+        } catch (Exception e) {
+            thrownException = e;
+        }
+    }
+
+    @Then("the activity's status should be updated to inactive")
+    public void theActivityStatusShouldBeUpdatedToInactive() {
+        CostCenterActivity updatedActivity = costCenterActivityRepository.findById(activity.getActivityId()).orElse(null);
+        assertNotNull(updatedActivity);
+        assertFalse(updatedActivity.getIsActive());
     }
 }
