@@ -165,3 +165,4 @@ checkpoints:
         anActivityMustHaveAName:
           glue: true
           service: true
+          done: true
