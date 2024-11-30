@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
+import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -157,5 +158,34 @@ public class CostManagementSteps {
     public void theSystemShouldReturnAnEmptyListOfCostCenters() {
         assertNotNull(fetchedCostCenters);
         assertTrue(fetchedCostCenters.isEmpty());
+    }
+
+    @Given("there are cost centers named {string}, {string}, and {string}")
+    public void thereAreCostCentersNamed(String name1, String name2, String name3) {
+        User manager = new User();
+        manager.setEmail("manager@example.com");
+        manager.setFirstName("Manager");
+        manager.setLastName("Test");
+        userRepository.save(manager);
+
+        List<String> names = Arrays.asList(name1, name2, name3);
+        for (String name : names) {
+            CostCenter costCenter = new CostCenter();
+            costCenter.setName(name);
+            costCenter.setManager(manager);
+            costCenterRepository.save(costCenter);
+        }
+    }
+
+    @When("the controller filters the list with the partial name {string}")
+    public void theControllerFiltersTheListWithThePartialName(String partialName) {
+        fetchedCostCenters = fetchAndFilterCostCentersAction.execute(partialName, null);
+    }
+
+    @Then("the system should return a list containing only the {string} cost center")
+    public void theSystemShouldReturnAListContainingOnlyTheCostCenter(String expectedCostCenterName) {
+        assertNotNull(fetchedCostCenters);
+        assertEquals(1, fetchedCostCenters.size());
+        assertEquals(expectedCostCenterName, fetchedCostCenters.get(0).getName());
     }
 }
