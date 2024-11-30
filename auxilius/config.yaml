@@ -118,3 +118,5 @@ checkpoints:
       aControllerCreatesACostCenter:
         action: true
         actionClassName: "CreateCostCenterWithNameAndManager"
+        aCostCenterMustHaveANameAndAManager:
+          glue: true
